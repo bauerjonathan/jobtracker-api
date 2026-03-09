@@ -1,7 +1,8 @@
 package com.jonathanb.jobtracker.controller;
 
-import com.jonathanb.jobtracker.repository.JobApplicationRepository;
-import com.jonathanb.jobtracker.entity.JobApplication;
+import com.jonathanb.jobtracker.dto.JobApplicationRequest;
+import com.jonathanb.jobtracker.dto.JobApplicationResponse;
+import com.jonathanb.jobtracker.service.JobApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,26 +13,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobApplicationController {
 
-    private final JobApplicationRepository repository;
+    private final JobApplicationService service;
 
     @GetMapping
-    public List<JobApplication> getAll() {
-        return repository.findAll();
+    public List<JobApplicationResponse> getAll() {
+        return service.getAll();
     }
 
     @PostMapping
-    public JobApplication create(@RequestBody @Valid JobApplication application) {
-        return repository.save(application);
+    public JobApplicationResponse create(@RequestBody @Valid JobApplicationRequest request) {
+        return service.create(request);
     }
 
     @GetMapping("/{id}")
-    public JobApplication getById(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found"));
+    public JobApplicationResponse getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
+        service.delete(id);
     }
 }
