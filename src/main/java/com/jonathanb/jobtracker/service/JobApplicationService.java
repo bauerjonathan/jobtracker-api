@@ -56,4 +56,17 @@ public class JobApplicationService {
                 .appliedAt(application.getAppliedAt())
                 .build();
     }
+
+    public JobApplicationResponse update(Long id, JobApplicationRequest request) {
+        JobApplication application = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bewerbung nicht gefunden"));
+
+        application.setCompany(request.getCompany());
+        application.setPosition(request.getPosition());
+        application.setStatus(request.getStatus());
+        application.setNotes(request.getNotes());
+        application.setAppliedAt(request.getAppliedAt());
+
+        return toResponse(repository.save(application));
+    }
 }
